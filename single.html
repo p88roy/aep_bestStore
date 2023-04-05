@@ -1,0 +1,580 @@
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<title>Best Store | PDP</title>
+	
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-P9Q2S9B');</script>
+<!-- End Google Tag Manager -->
+	
+<!-- for-mobile-apps -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Best Store Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+		function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- //for-mobile-apps -->
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<!-- js -->
+<script src="js/jquery.min.js"></script>
+<!-- //js -->
+<!-- cart -->
+	<script src="js/simpleCart.min.js"> </script>
+<!-- cart -->
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+<!-- for bootstrap working -->
+	<script type="text/javascript" src="js/bootstrap-3.1.1.min.js"></script>
+<!-- //for bootstrap working -->
+<link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Lato:400,100,100italic,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+<!-- animation-effect -->
+<link href="css/animate.min.css" rel="stylesheet"> 
+<script src="js/wow.min.js"></script>
+	
+<script>
+ new WOW().init();
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		var prodNm = window.location.search.substring(1).split('&')[0].split('=')[1].replace(/%20/g, " ");;
+		var dPrice = window.location.search.substring(1).split('&')[1].split('=')[1];
+		var img = window.location.search.substring(1).split('&')[2].split('=')[1];
+
+		$('.simpleCart_shelfItem h3').text(prodNm);
+		$('h4 .item_price').text("$"+dPrice);
+		$('#prodImg').attr('src',img);
+		
+		window.itemDetails = window.itemDetails || {}; 
+		if(window.itemDetails.prod!=undefined && window.itemDetails.prod.length>0){
+			window.itemDetails.prod.push({
+				"prodName": prodNm,
+				"price": dPrice,
+				"prodUrl": img		
+			});
+		}else{
+			window.itemDetails.prod = window.itemDetails.prod || 
+			[
+				{
+					"prodName": prodNm,
+					"price": dPrice,
+					"prodUrl": img
+				}
+			];
+		}
+		
+		//on every page
+		var checkUser = localStorage.getItem("user_id");
+		var userName = localStorage.getItem("user_name");
+		if(checkUser!=undefined && checkUser!='' && userName!=undefined && userName!=''){
+			$('.header-grid-left ul li')[3].remove();
+			$('.header-grid-left ul li')[2].innerText=userName;
+		}
+		
+		//event:view_item - ga 
+		var prod_name = $('.simpleCart_shelfItem h3').text();
+		var pprice = $('h4 .item_price').text().replace('$','').trim();
+		var prod_price = parseInt(pprice);
+		var prod_category = window.location.pathname.split('.html')[0].split('/')[1];
+		var prod_brand = 'Best Store '+prod_category;
+		
+		dataLayer.push({
+		  'event':'view_item',	
+		  'value': prod_price,	
+		  'ecommerce': {                    
+		    'items': [
+		     {
+		       'item_name': prod_name,    
+		       'currency':'USD',
+		       'item_brand': prod_brand,
+		       'item_category': prod_category,
+		       'price': prod_price,
+		       'quantity':1     
+		     }]
+		  }
+		});
+	})
+	
+	function searchSubmit(theForm) {
+		var searchTerm = $('input#search').val().toLowerCase();
+		if(searchTerm!=undefined && (searchTerm.includes('shirt') || searchTerm.includes('shoe') || searchTerm.includes('blazer'))){
+			$('#searchForm').attr('action', 'https://best-store-lac.vercel.app/products.html');
+			dataLayer.push({
+			  'event':'search',
+			  'search_term':searchTerm
+			});
+		}
+		else if(searchTerm!=undefined && (searchTerm.includes('table') || searchTerm.includes('sofa') || searchTerm.includes('anklet') ||
+			searchTerm.includes('cabinet') || searchTerm.includes('lamp') || searchTerm.includes('bangles') || 
+			searchTerm.includes('entertainment') || searchTerm.includes('clock') )){			
+			$('#searchForm').attr('action', 'https://best-store-lac.vercel.app/furniture.html');
+			dataLayer.push({
+			  'event':'search',
+			  'search_term':searchTerm
+			});
+		}
+		var actionVal = 'https://best-store-lac.vercel.app/single.html?q='+searchTerm;
+		$('#searchForm').attr('action', actionVal);
+	}
+	
+	function addtoCartFunction(element){
+		var prod_name = $('.simpleCart_shelfItem h3').text();
+		var pprice = $('h4 .item_price').text().replace('$','').trim();
+		var prod_price = parseInt(pprice);
+		var prod_img = $('#prodImg').attr('src');
+
+		var itemsInCartLs = localStorage.getItem("itemsInCart");
+		if(itemsInCartLs!=undefined && itemsInCartLs!=''){
+			var itemsInCart = JSON.parse(itemsInCartLs);
+			itemsInCart.push({"prodName":prod_name , "price":prod_price , "quantity":1 , "imgSrc":prod_img });
+			var jsonToStrCartItems = JSON.stringify(itemsInCart);
+			localStorage.setItem("itemsInCart", jsonToStrCartItems);
+		}
+		else{
+			var itemsInCart = [
+				{"prodName":prod_name , "price":prod_price , "quantity":1 , "imgSrc":prod_img }
+			];
+			var jsonToStrCartItems = JSON.stringify(itemsInCart);
+			localStorage.setItem("itemsInCart", jsonToStrCartItems);
+		}
+		
+		var prod_category = window.location.pathname.split('.html')[0].split('/')[1];
+		var prod_brand = 'Best Store '+prod_category;
+		dataLayer.push({
+		  'event':'add_to_cart',	
+		  'ecommerce': {                    
+		    'items': [
+		     {
+		       'item_name': prod_name,    
+		       'currency':'USD',
+		       'item_brand': prod_brand,
+		       'item_category': prod_category,
+		       'price': prod_price,
+		       'quantity':1     
+		     }]
+		  }
+		});
+	}
+</script>
+<script>
+	function typeOfLink(element) {
+		var linkType='';
+		var click_url = $(element).attr('href');
+		if(/\.(pdf|xlsx|png|docx)/.test(click_url)){
+			linkType='Download Link';
+		}else if(click_url.includes('.html') || click_url.includes('#')){
+			linkType='Custom Link';
+		}else{
+			linkType='Exit Link';
+		}
+		return linkType;
+	}
+
+	function clickDL(linkName, componentName, componentTitle, linkType){
+		window.dataLayer = window.dataLayer || [];
+		dataLayer.push({ event_data: null });
+		dataLayer.push({
+			event: "click",
+			event_data: {
+				"link_name": linkName,
+				"component_name": componentName,
+				"component_title": componentTitle,
+				"link_type": linkType
+			}
+		});
+	}	
+	
+	function footerClickFunction(element){
+		try{
+			var linkName = $(element).text().toUpperCase().trim();
+			var componentName = "Footer";
+			var componentTitle = $(element).closest('div.footer-grid').find('h3').text().trim();
+			if(componentTitle==undefined || componentTitle==""){
+				componentTitle = "Footer Navigation";
+			}
+			var linkType = typeOfLink(element);
+			clickDL(linkName, componentName, componentTitle, linkType);
+		}catch(exc){}
+	}
+
+	function breadcrumbClickFunction(element){
+		var linkName = $(element).text().toUpperCase().trim();
+		var componentName = "Breadcrumb";
+		var componentTitle = "Breadcrumb Navigation";
+		var linkType = typeOfLink(element);
+		clickDL(linkName, componentName, componentTitle, linkType);
+	}
+	
+	function otherClickFunction(element){
+		var linkName = $(element).text().toUpperCase().trim();
+		var componentName = "Login Form";
+		var componentTitle = "For New People";
+		var linkType = typeOfLink(element);
+		clickDL(linkName, componentName, componentTitle, linkType);
+	}
+
+	function headerClickFunction(element){
+		try{
+			var linkName = $(element).text().toUpperCase().trim();
+			if(linkName==undefined || linkName==""){
+				linkName = $(element).attr('title').toUpperCase().trim();
+			}
+			var componentName = "Header";
+			var componentTitle = "";
+			var linkClass = $(element).attr('class');
+			if(linkClass!=undefined && linkClass.includes('top_header_link')){
+				componentTitle = "Top Link Navigation";
+			}else{
+				componentTitle = "Header Navigation";
+			}
+			var linkType = typeOfLink(element);
+			clickDL(linkName, componentName, componentTitle, linkType);
+		}catch(exc){}			
+	}
+	
+	function otherClickFunction(element){
+		var linkName = $(element).text().toUpperCase().trim();
+		if(linkName==undefined || linkName==""){
+			linkName = $(element).attr('title').toUpperCase().trim();
+		}
+		var componentName = "PDP Share Product on Social Media";
+		var componentTitle = "Share On";
+		var linkType = typeOfLink(element);
+		clickDL(linkName, componentName, componentTitle, linkType);
+	}
+	
+	function addReview() {
+		try{
+			//on mail us page
+			var email = $('input[value="Email"]').val();
+			var subject = $('input[value="Subject"]').val();
+			var message = $('textarea').val();
+			var hashedMail = '';
+
+			if(email!=undefined && email.includes('@')){
+				hashedMail = stringToHashAR(email);
+			}
+			window.dataLayer = window.dataLayer || [];
+			dataLayer.push({ event_data: null });
+			dataLayer.push({
+				event: "formSubmission",
+				event_data: {
+					"hashed_mail": hashedMail,
+					'form_type': 'Review Form',
+					"subject": subject,
+					"message": message
+				}
+			});
+		}catch(exc){
+		}
+	}
+
+	function stringToHashAR(email) {
+		var email_val = email;
+		var hash = 0;		  
+		if (email_val.length == 0) return hash;	  
+		for (i = 0; i < email_val.length; i++) {
+			char = email_val.charCodeAt(i);
+			hash = ((hash << 5) - hash) + char;
+			hash = hash & hash;
+		}
+		if(hash<0){
+			hash = hash * -1;
+		}
+		return hash;
+	}
+
+	function tabsClickFunction(element){
+		try{
+			var tabName = $(element).closest('li[role="presentation"]').find('a:first').text().toUpperCase().trim();
+			var tabOption = $(element).text().toUpperCase().trim();
+			var componentName = "PDP : "+tabName;
+			var linkType = typeOfLink(element);
+
+			window.dataLayer = window.dataLayer || [];
+			dataLayer.push({ event_data: null });
+			dataLayer.push({
+				event: "click",
+				event_data: {
+					"tab_name": tabName,
+					"tab_option": tabOption,
+					"component_name": componentName,
+					"link_type": linkType
+				}
+			});
+		}catch(exc){}
+	}
+</script>	
+	
+<!-- //animation-effect -->
+</head>
+	
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P9Q2S9B"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->	
+<!-- header -->
+	<div class="header">
+		<div class="container">
+			<div class="header-grid">
+				<div class="header-grid-left animated wow slideInLeft" data-wow-delay=".5s">
+					<ul>
+						<li><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i><a href="mailto:info@example.com" class="top_header_link" onclick="headerClickFunction(this)">@example.com</a></li>
+						<li><i class="glyphicon glyphicon-earphone" aria-hidden="true"></i>+1234 <span>567</span> 892</li>
+						<li><i class="glyphicon glyphicon-log-in" aria-hidden="true"></i><a href="login.html" class="top_header_link" onclick="headerClickFunction(this)">Login</a></li>
+						<li><i class="glyphicon glyphicon-book" aria-hidden="true"></i><a href="register.html" class="top_header_link" onclick="headerClickFunction(this)">Register</a></li>
+					</ul>
+				</div>
+				<div class="header-grid-right animated wow slideInRight" data-wow-delay=".5s">
+					<ul class="social-icons">
+						<li><a href="https://www.facebook.com/" title="Facebook" class="facebook top_header_link" target="_blank" onclick="headerClickFunction(this)"></a></li>
+						<li><a href="https://www.instagram.com/" title="Instagram" class="instagram top_header_link" target="_blank" onclick="headerClickFunction(this)"></a></li>
+					</ul>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+			<div class="logo-nav">
+				<div class="logo-nav-left animated wow zoomIn" data-wow-delay=".5s">
+					<h1><a href="index.html" class="header_link" onclick="headerClickFunction(this)">Best Store <span>Shop anywhere</span></a></h1>
+				</div>
+				<div class="logo-nav-left1">
+					<nav class="navbar navbar-default">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header nav_2">
+						<button type="button" class="navbar-toggle collapsed navbar-toggle1" data-toggle="collapse" data-target="#bs-megadropdown-tabs">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
+					<div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
+						<ul class="nav navbar-nav">	
+							<li><a href="index.html" class="header_link" onclick="headerClickFunction(this)">Home</a></li>	
+							<li><a href="products.html" class="header_link" onclick="headerClickFunction(this)">Products</a></li>
+							<li><a href="furniture.html" class="header_link" onclick="headerClickFunction(this)">Furniture</a></li>
+							<li><a href="mail.html" class="header_link" onclick="headerClickFunction(this)">Mail Us</a></li>
+						</ul>
+					</div>
+					</nav>
+				</div>
+				<div class="logo-nav-right">
+					<div class="search-box">
+						<div id="sb-search" class="sb-search">
+							<form id="searchForm" onsubmit="searchSubmit(this);">
+								<input class="sb-search-input" placeholder="Enter your search term..." type="search" id="search">
+								<input class="sb-search-submit" type="submit" value="">
+								<span class="sb-icon-search"> </span>
+							</form>
+						</div>
+					</div>
+						<!-- search-scripts -->
+						<script src="js/classie.js"></script>
+						<script src="js/uisearch.js"></script>
+							<script>
+								new UISearch( document.getElementById( 'sb-search' ) );
+							</script>
+						<!-- //search-scripts -->
+				</div>
+				<div class="header-right">
+					<div class="cart box_1">
+						<a href="checkout.html">
+							<h3> 
+								<div class="total"><span>View Cart</span></div>
+								<img src="images/bag.png" alt="" />
+							</h3>
+						</a>
+						<div class="clearfix"> </div>
+					</div>	
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+		</div>
+	</div>
+<!-- //header -->
+<!-- breadcrumbs -->
+	<div class="breadcrumbs">
+		<div class="container">
+			<ol class="breadcrumb breadcrumb1 animated wow slideInLeft" data-wow-delay=".5s">
+				<li><a href="index.html" onclick="breadcrumbClickFunction(this)"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</a></li>
+				<li class="active">Single Page</li>
+				<li><a type="link" target="_blank" href="Best Store.pdf" class="download" onclick="breadcrumbClickFunction(this)"><i class="fa-solid fa-download mr-1" aria-hidden="true"></i><span aria-label="Download PDF">Download Best Store PDF</span></a></li>
+			</ol>
+		</div>
+	</div>
+<!-- //breadcrumbs -->
+<!-- single -->
+	<div class="single">
+		<div class="container">
+			<div class="col-md-12 single-right">
+				<img src="images/si2.jpg" data-imagezoom="true" class="img-responsive" draggable="false" id="prodImg">
+				<div class="col-md-12 single-right-left simpleCart_shelfItem animated wow slideInRight" data-wow-delay=".5s">
+					<h3>Men's Solid Casual Shirt</h3>
+					<h4><span class="item_price">$550</span></h4>
+					<div class="rating1">
+						<span class="starRating">
+							<input id="rating5" type="radio" name="rating" value="5">
+							<label for="rating5">5</label>
+							<input id="rating4" type="radio" name="rating" value="4">
+							<label for="rating4">4</label>
+							<input id="rating3" type="radio" name="rating" value="3" checked>
+							<label for="rating3">3</label>
+							<input id="rating2" type="radio" name="rating" value="2">
+							<label for="rating2">2</label>
+							<input id="rating1" type="radio" name="rating" value="1">
+							<label for="rating1">1</label>
+						</span>
+					</div>
+					<div class="description">
+						<h5><i>Description</i></h5>
+						<p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore 
+							eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+					</div>
+			
+					<div class="occasion-cart">
+						<a class="item_add" onclick="addtoCartFunction(this)">add to cart </a>
+					</div>
+					<div class="social">
+						<div class="social-left">
+							<p>Share On :</p>
+						</div>
+						<div class="social-right">
+							<ul class="social-icons">
+								<li><a href="https://www.facebook.com/" title="Facebook" class="facebook top_header_link" target="_blank" onclick="otherClickFunction(this)"></a></li>
+								<li><a href="https://www.instagram.com/" title="Instagram" class="instagram top_header_link" target="_blank" onclick="otherClickFunction(this)"></a></li>
+							</ul>
+						</div>
+						<div class="clearfix"> </div>
+					</div>
+				</div>
+				<div class="clearfix"> </div>
+				<div class="bootstrap-tab animated wow slideInUp" data-wow-delay=".5s">
+					<div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
+						<ul id="myTab" class="nav nav-tabs" role="tablist">
+							<li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true" onclick="tabsClickFunction(this)">Description</a></li>
+							<li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" onclick="tabsClickFunction(this)">Reviews(2)</a></li>
+							<li role="presentation" class="dropdown">
+								<a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown" aria-controls="myTabDrop1-contents">Information <span class="caret"></span></a>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents">
+									<li><a href="#dropdown1" tabindex="-1" role="tab" id="dropdown1-tab" data-toggle="tab" aria-controls="dropdown1" onclick="tabsClickFunction(this)">cleanse</a></li>
+									<li><a href="#dropdown2" tabindex="-1" role="tab" id="dropdown2-tab" data-toggle="tab" aria-controls="dropdown2" onclick="tabsClickFunction(this)">fanny</a></li>
+								</ul>
+							</li>
+						</ul>
+						<div id="myTabContent" class="tab-content">
+							<div role="tabpanel" class="tab-pane fade in active bootstrap-tab-text" id="home" aria-labelledby="home-tab">
+								<h5>Product Brief Description</h5>
+								<p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.
+									<span>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></p>
+							</div>
+							<div role="tabpanel" class="tab-pane fade bootstrap-tab-text" id="profile" aria-labelledby="profile-tab">
+								<div class="bootstrap-tab-text-grids">
+									<div class="bootstrap-tab-text-grid">
+										<div class="bootstrap-tab-text-grid-left">
+											<img src="images/4.png" alt=" " class="img-responsive" />
+										</div>
+										<div class="bootstrap-tab-text-grid-right">
+											<ul>
+												<li>Admin</li>	
+											</ul>
+											<p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis 
+												suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem 
+												vel eum iure reprehenderit.</p>
+										</div>
+										<div class="clearfix"> </div>
+									</div>
+									<div class="bootstrap-tab-text-grid">
+										<div class="bootstrap-tab-text-grid-left">
+											<img src="images/5.png" alt=" " class="img-responsive" />
+										</div>
+										<div class="bootstrap-tab-text-grid-right">
+											<ul>
+												<li>Admin</li>	
+											</ul>
+											<p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis 
+												suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem 
+												vel eum iure reprehenderit.</p>
+										</div>
+										<div class="clearfix"> </div>
+									</div>
+									<div class="add-review">
+										<h4>add a review</h4>
+										<form onsubmit="return addReview();" action="javascript:alert('Thank you for review!')">
+											<input type="text" value="Name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Name';}" required="">
+											<input type="email" value="Email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}" required="">
+											<input type="text" value="Subject" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Subject';}" required="">
+											<textarea type="text"  onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Message...';}" required="">Message...</textarea>
+											<input type="submit" value="Send" >
+										</form>
+									</div>
+								</div>
+							</div>
+							<div role="tabpanel" class="tab-pane fade bootstrap-tab-text" id="dropdown1" aria-labelledby="dropdown1-tab">
+								<p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
+							</div>
+							<div role="tabpanel" class="tab-pane fade bootstrap-tab-text" id="dropdown2" aria-labelledby="dropdown2-tab">
+								<p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater. Lomo wolf viral, mustache readymade thundercats keffiyeh craft beer marfa ethical. Wolf salvia freegan, sartorial keffiyeh echo park vegan.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"> </div>
+		</div>
+	</div>
+<!-- //single -->
+
+<!-- footer -->
+	<div class="footer">
+		<div class="container">
+			<div class="footer-grids">
+				<div class="col-md-4 footer-grid animated wow slideInLeft" data-wow-delay=".5s">
+					<h3>About Us</h3>
+					<p>Duis aute irure dolor in reprehenderit in voluptate velit esse.<span>Excepteur sint occaecat cupidatat 
+						non proident, sunt in culpa qui officia deserunt mollit.</span></p>
+				</div>
+				<div class="col-md-4 footer-grid animated wow slideInLeft" data-wow-delay=".6s">
+					<h3>Contact Info</h3>
+					<ul>
+						<li><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>1234k Avenue, 4th block, <span>New York City.</span></li>
+						<li><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i><a href="mailto:info@example.com" class="footer_link" onclick="footerClickFunction(this)">info@example.com</a></li>
+						<li><i class="glyphicon glyphicon-earphone" aria-hidden="true"></i>+1234 567 567</li>
+					</ul>
+				</div>
+				<div class="col-md-4 footer-grid animated wow slideInLeft" data-wow-delay=".6s">
+					<h3>Explore</h3>
+					<ul>
+						<li><a class="footer_link" onclick="footerClickFunction(this)" href="index.html">HOME</a></li>
+						<li><a class="footer_link" onclick="footerClickFunction(this)" href="products.html">PRODUCTS</a></li>
+						<li><a class="footer_link" onclick="footerClickFunction(this)" href="furniture.html">FURNITURE</a></li>
+					</ul>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+			<div class="footer-logo animated wow slideInUp" data-wow-delay=".5s">
+				<h2><a href="index.html" class="footer_link" onclick="footerClickFunction(this)">Best Store <span>shop anywhere</span></a></h2>
+			</div>
+			<div class="copy-right animated wow slideInUp" data-wow-delay=".5s">
+				<p>&copy 2016 Best Store. All rights reserved | Design by <a href="http://w3layouts.com/" class="footer_link" onclick="footerClickFunction(this)">W3layouts</a></p>
+			</div>
+		</div>
+	</div>
+<!-- //footer -->
+<!-- zooming-effect -->
+	<script src="js/imagezoom.js"></script>
+<!-- //zooming-effect -->
+</body>
+</html>
