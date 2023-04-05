@@ -1,0 +1,870 @@
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<title>Best Store | Products</title>
+	
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-P9Q2S9B');</script>
+<!-- End Google Tag Manager -->
+	
+<!-- for-mobile-apps -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Best Store Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+		function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- //for-mobile-apps -->
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<!-- js -->
+<script src="js/jquery.min.js"></script>
+<!-- //js -->
+<!-- cart -->
+	<script src="js/simpleCart.min.js"> </script>
+<!-- cart -->
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+<!-- for bootstrap working -->
+	<script type="text/javascript" src="js/bootstrap-3.1.1.min.js"></script>
+<!-- //for bootstrap working -->
+<link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Lato:400,100,100italic,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+<!-- animation-effect -->
+<!-- link href="css/animate.min.css" rel="stylesheet" -->
+<script src="js/wow.min.js"></script>
+
+<script>
+	$(document).ready(function(){
+		//on every page
+		var checkUser = localStorage.getItem("user_id");
+		var userName = localStorage.getItem("user_name");
+		if(checkUser!=undefined && checkUser!='' && userName!=undefined && userName!=''){
+			$('.header-grid-left ul li')[3].remove();
+			$('.header-grid-left ul li')[2].innerText=userName;
+		}
+		
+		var counter = $('a').length;
+		for(var i=0; i<counter; i++) {
+			var hrefAttr = $('a')[i].getAttribute('href');
+			if(hrefAttr!=undefined && hrefAttr.includes('single.html')){
+				var prodName = $('a')[i].parentElement.parentElement.nextElementSibling.innerText;
+				var prodPrice = $('a')[i].parentElement.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.innerText.split('\n')[0].split('$')[2];
+				var imgLink = $('a')[i].parentElement.previousElementSibling.getAttribute('src');
+
+				var param = "?pdNm="+prodName+"&pdPrc="+prodPrice+"&imgLk="+imgLink;		
+				if(prodName!=undefined && prodName!=''){
+					hrefAttr = hrefAttr+param;
+					$('a')[i].setAttribute('href',hrefAttr);				
+				}		
+			}
+		}
+	});
+	
+	function viewItemFunction(item){
+		try{
+			var hrefVal = $(item).attr('href'); //https://best-store-lac.vercel.app/single.html?pdNm=Gray%20Shirt&pdPrc=250&imgLk=images/19.jpg
+			var prod_category = window.location.pathname.split('.html')[0].split('/')[1];
+			var prod_brand = 'Best Store '+prod_category;
+			var prod_name = hrefVal.split('?pdNm=').pop().split('&')[0];
+			var prod_price = parseInt(hrefVal.split('pdPrc=').pop().split('&')[0]);
+			dataLayer.push({
+			  'event':'select_item',
+			  'ecommerce': {                 
+				'items': [
+				 {
+				   'item_name': prod_name,  
+				   'currency':'USD',
+				   'item_brand': prod_brand,
+				   'item_category': prod_category,
+				   'price': prod_price,
+				   'quantity': 1
+				 }]
+			  }
+			});
+		}catch(exc){}	
+	}
+
+	function searchSubmit(theForm) {
+		var searchTerm = $('input#search').val().toLowerCase();
+		if(searchTerm!=undefined && (searchTerm.includes('shirt') || searchTerm.includes('shoe') || searchTerm.includes('blazer'))){
+			$('#searchForm').attr('action', 'https://best-store-lac.vercel.app/products.html');
+			dataLayer.push({
+			  'event':'search',
+			  'search_term':searchTerm
+			});
+		}
+		else if(searchTerm!=undefined && (searchTerm.includes('table') || searchTerm.includes('sofa') || searchTerm.includes('anklet') ||
+			searchTerm.includes('cabinet') || searchTerm.includes('lamp') || searchTerm.includes('bangles') || 
+			searchTerm.includes('entertainment') || searchTerm.includes('clock') )){			
+			$('#searchForm').attr('action', 'https://best-store-lac.vercel.app/furniture.html');
+			dataLayer.push({
+			  'event':'search',
+			  'search_term':searchTerm
+			});
+		}
+
+		return true;
+	}
+	
+	function addtoCartFunction(element){
+		try{
+			var prod_name = $(element).parents("div.new-collections-grid1").find('h4').text().trim();
+			if(prod_name===undefined || prod_name===null || prod_name===''){
+				prod_name = $(element).parents(".new-products-grid-right").find('h4').text().trim();	
+			}
+			var pprice = $(element).prev().text().replace('$','').trim();
+			var prod_price = parseInt(pprice);
+
+			var oprice = $(element).prev().prev().text().replace('$','').trim();
+			var original_price = parseInt(oprice);
+			var discount_price = original_price-prod_price;
+			if(oprice===undefined || oprice===null || oprice===''){
+				discount_price='na';
+			}
+
+			var prod_img = $(element).parents("div.new-collections-grid1").find('.new-collections-grid1-image img').attr('src');
+			if(prod_img===undefined || prod_img===null || prod_img===''){
+				prod_img = $(element).parents(".new-products-grid-right").prev().find('img').attr('src');
+			}
+			
+			var prod_quantity = 1;
+			var itemsInCartLs = localStorage.getItem("itemsInCart");
+			var idx = 0;
+			var found = false;
+			if(itemsInCartLs!=undefined && itemsInCartLs!=''){
+				var itemsInCart = JSON.parse(itemsInCartLs);
+				for(var i=0; i<itemsInCart.length; i++){
+					var prevItemName = itemsInCart[i].prodName;
+					if(prod_name==prevItemName){
+						var prevItemQuantity = itemsInCart[i].quantity;
+						prod_quantity = prevItemQuantity + 1;
+						idx = i;
+						found = true;
+						break;
+					}
+				}
+				if(found){
+					itemsInCart[idx].quantity=prod_quantity;
+				}else{
+					itemsInCart.push({"prodName":prod_name , "price":prod_price , "quantity":prod_quantity , "imgSrc":prod_img });
+				}
+				var jsonToStrCartItems = JSON.stringify(itemsInCart);
+				localStorage.setItem("itemsInCart", jsonToStrCartItems);
+			}
+			else{
+				var itemsInCart = [
+					{"prodName":prod_name , "price":prod_price , "quantity":1 , "imgSrc":prod_img }
+				];
+				var jsonToStrCartItems = JSON.stringify(itemsInCart);
+				localStorage.setItem("itemsInCart", jsonToStrCartItems);
+			}
+
+			var prod_category = window.location.pathname.split('.html')[0].split('/')[1];
+			var prod_brand = 'Best Store '+prod_category;
+			if(discount_price==undefined || discount_price==null || discount_price=='' || discount_price=='na'){
+				dataLayer.push({
+				  'event':'add_to_cart',
+				  'ecommerce': {                 
+				    'items': [
+				     {
+				       'item_name': prod_name,  
+				       'currency':'USD',
+				       'item_brand': prod_brand,
+				       'item_category': prod_category,
+				       'price': prod_price,
+				       'quantity': 1
+				     }]
+				  }
+				});
+			}else{
+				dataLayer.push({
+				  'event':'add_to_cart',
+				  'ecommerce': {                 
+				    'items': [
+				     {
+				       'item_name': prod_name,  
+				       'currency':'USD',
+				       'discount':discount_price,
+				       'item_brand': prod_brand,
+				       'item_category': prod_category,
+				       'price': prod_price,
+				       'quantity': 1
+				     }]
+				  }
+				});
+			}
+			
+		}catch(exc){}
+	}
+	
+	$(window).on('load', function() {
+		setTimeout(view_itemList, 5000);
+	});
+	
+	function view_itemList() {
+		var len = $('.new-collections-grid1').length;
+		var prod_category = window.location.pathname.split('.html')[0].split('/')[1];
+		var prod_brand = 'Best Store '+prod_category;
+		var itemsInCart = [];
+		for(var i=0; i<len; i++){
+				var prod_name = $('.new-collections-grid1')[i].children[1].innerText;
+				var originalPrice = parseInt($('.new-collections-grid1')[i].children[3].innerText.split('$')[1].trim());
+				var prod_price = parseInt($('.new-collections-grid1')[i].children[3].innerText.split('$')[2].split('\n')[0]);
+				var discount_price = originalPrice-prod_price;
+				itemsInCart.push({"item_name":prod_name , "currency": "USD", discount: discount_price, item_brand: prod_brand, item_category: prod_category, "price":prod_price , "quantity":1 });
+		}
+		dataLayer.push({
+			'event':'view_item_list',
+			'ecommerce': {                 
+				'items': itemsInCart
+			}
+		}); 
+	}
+</script>
+	
+<script>
+	function typeOfLink(element) {
+		var linkType='';
+		var click_url = $(element).attr('href');
+		if(/\.(pdf|xlsx|png|docx)/.test(click_url)){
+			linkType='Download Link';
+		}else if(click_url.includes('.html')){
+			linkType='Custom Link';
+		}else{
+			linkType='Exit Link';
+		}
+		return linkType;
+	}
+
+	function clickDL(linkName, componentName, componentTitle, linkType){
+		window.dataLayer = window.dataLayer || [];
+		dataLayer.push({
+			event: "click",
+			event_data: {
+				"link_name": linkName,
+				"component_name": componentName,
+				"component_title": componentTitle,
+				"link_type": linkType
+			}
+		});
+	}	
+	
+	function footerClickFunction(element){
+		try{
+			var linkName = $(element).text().toUpperCase().trim();
+			var componentName = "Footer";
+			var componentTitle = $(element).closest('div.footer-grid').find('h3').text().trim();
+			if(componentTitle==undefined || componentTitle==""){
+				componentTitle = "Footer Navigation";
+			}
+			var linkType = typeOfLink(element);
+			clickDL(linkName, componentName, componentTitle, linkType);
+		}catch(exc){}
+	}
+
+	function breadcrumbClickFunction(element){
+		var linkName = $(element).text().toUpperCase().trim();
+		var componentName = "Breadcrumb";
+		var componentTitle = "Breadcrumb Navigation";
+		var linkType = typeOfLink(element);
+		clickDL(linkName, componentName, componentTitle, linkType);
+	}
+
+	function headerClickFunction(element){
+		try{
+			var linkName = $(element).text().toUpperCase().trim();
+			if(linkName==undefined || linkName==""){
+				linkName = $(element).attr('title').toUpperCase().trim();
+			}
+			var componentName = "Header";
+			var componentTitle = "";
+			var linkClass = $(element).attr('class');
+			if(linkClass!=undefined && linkClass.includes('top_header_link')){
+				componentTitle = "Top Link Navigation";
+			}else{
+				componentTitle = "Header Navigation";
+			}
+			var linkType = typeOfLink(element);
+			clickDL(linkName, componentName, componentTitle, linkType);
+		}catch(exc){}			
+	}
+</script>
+	
+<script>
+ new WOW().init();
+</script>
+<!-- //animation-effect -->
+</head>
+<!-- //animation-effect -->
+</head>
+	
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P9Q2S9B"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->	
+<!-- header -->
+	<div class="header">
+		<div class="container">
+			<div class="header-grid">
+				<div class="header-grid-left animated wow slideInLeft">
+					<ul>
+						<li><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i><a href="mailto:info@example.com" class="top_header_link" onclick="headerClickFunction(this)">@example.com</a></li>
+						<li><i class="glyphicon glyphicon-earphone" aria-hidden="true"></i>+1234 <span>567</span> 892</li>
+						<li><i class="glyphicon glyphicon-log-in" aria-hidden="true"></i><a href="login.html" class="top_header_link" onclick="headerClickFunction(this)">Login</a></li>
+						<li><i class="glyphicon glyphicon-book" aria-hidden="true"></i><a href="register.html" class="top_header_link" onclick="headerClickFunction(this)">Register</a></li>
+					</ul>
+				</div>
+				<div class="header-grid-right animated wow slideInRight">
+					<ul class="social-icons">
+						<li><a href="https://www.facebook.com/" title="Facebook" class="facebook top_header_link" target="_blank" onclick="headerClickFunction(this)"></a></li>
+						<li><a href="https://www.instagram.com/" title="Instagram" class="instagram top_header_link" target="_blank" onclick="headerClickFunction(this)"></a></li>
+					</ul>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+			<div class="logo-nav">
+				<div class="logo-nav-left animated wow zoomIn">
+					<h1><a href="index.html" class="header_link" onclick="headerClickFunction(this)">Best Store <span>Shop anywhere</span></a></h1>
+				</div>
+				<div class="logo-nav-left1">
+					<nav class="navbar navbar-default">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header nav_2">
+						<button type="button" class="navbar-toggle collapsed navbar-toggle1" data-toggle="collapse" data-target="#bs-megadropdown-tabs">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
+					<div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
+						<ul class="nav navbar-nav">
+							<li><a href="index.html" class="header_link" onclick="headerClickFunction(this)">Home</a></li>	
+							<li><a href="furniture.html" class="header_link" onclick="headerClickFunction(this)">Furniture</a></li>
+							<li><a href="mail.html" class="header_link" onclick="headerClickFunction(this)">Mail Us</a></li>
+						</ul>
+					</div>
+					</nav>
+				</div>
+				<div class="logo-nav-right">
+					<div class="search-box">
+						<div id="sb-search" class="sb-search">
+							<form id="searchForm" onsubmit="return searchSubmit(this);" action="https://best-store-lac.vercel.app/single.html">
+								<input class="sb-search-input" placeholder="Enter your search term..." type="search" id="search">
+								<input class="sb-search-submit" type="submit" value="">
+								<span class="sb-icon-search"> </span>
+							</form>
+						</div>
+					</div>
+						<!-- search-scripts -->
+						<script src="js/classie.js"></script>
+						<script src="js/uisearch.js"></script>
+							<script>
+								new UISearch( document.getElementById( 'sb-search' ) );
+							</script>
+						<!-- //search-scripts -->
+				</div>
+				<div class="header-right">
+					<div class="cart box_1">
+						<a href="checkout.html">
+							<h3> 
+								<div class="total"><span>View Cart</span></div>
+								<img src="images/bag.png" alt="" />
+							</h3>
+						</a>
+						<div class="clearfix"> </div>
+					</div>	
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+		</div>
+	</div>
+<!-- //header -->
+<!-- breadcrumbs -->
+	<div class="breadcrumbs">
+		<div class="container">
+			<ol class="breadcrumb breadcrumb1 animated wow slideInLeft">
+				<li><a href="index.html" onclick="breadcrumbClickFunction(this)"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</a></li>
+				<li class="active">Products</li>
+				<li><a type="link" target="_blank" href="Best Store.pdf" class="download" onclick="breadcrumbClickFunction(this)"><i class="fa-solid fa-download mr-1" aria-hidden="true"></i><span aria-label="Download PDF">Download Best Store PDF</span></a></li>
+			</ol>
+		</div>
+	</div>
+	<div class="products">
+		<div class="container">
+			<div class="col-md-4 products-left">
+				<div class="new-products animated wow slideInUp">
+					<h3>New Products</h3>
+					<div class="new-products-grids">
+						<div class="new-products-grid">
+							<div class="new-products-grid-left">
+								<img src="images/6.jpg" alt=" " class="img-responsive" />
+							</div>
+							<div class="new-products-grid-right">
+								<h4><span>Show Piece</span></h4>
+								<div class="rating">
+									<div class="rating-left">
+										<img src="images/2.png" alt=" " class="img-responsive">
+									</div>
+									<div class="rating-left">
+										<img src="images/2.png" alt=" " class="img-responsive">
+									</div>
+									<div class="rating-left">
+										<img src="images/2.png" alt=" " class="img-responsive">
+									</div>
+									<div class="rating-left">
+										<img src="images/1.png" alt=" " class="img-responsive">
+									</div>
+									<div class="rating-left">
+										<img src="images/1.png" alt=" " class="img-responsive">
+									</div>
+									<div class="clearfix"> </div>
+								</div>
+								<div class="simpleCart_shelfItem new-products-grid-right-add-cart">
+									<p> <span class="item_price">$180</span><a class="item_add" onclick="addtoCartFunction(this)">add to cart </a></p>
+								</div>
+							</div>
+							<div class="clearfix"> </div>
+						</div>
+						<div class="new-products-grid">
+							<div class="new-products-grid-left">
+								<img src="images/26.jpg" alt=" " class="img-responsive" />
+							</div>
+							<div class="new-products-grid-right">
+								<h4><span>Blazer</span></h4>
+								<div class="rating">
+									<div class="rating-left">
+										<img src="images/2.png" alt=" " class="img-responsive">
+									</div>
+									<div class="rating-left">
+										<img src="images/2.png" alt=" " class="img-responsive">
+									</div>
+									<div class="rating-left">
+										<img src="images/2.png" alt=" " class="img-responsive">
+									</div>
+									<div class="rating-left">
+										<img src="images/1.png" alt=" " class="img-responsive">
+									</div>
+									<div class="rating-left">
+										<img src="images/1.png" alt=" " class="img-responsive">
+									</div>
+									<div class="clearfix"> </div>
+								</div>
+								<div class="simpleCart_shelfItem new-products-grid-right-add-cart">
+									<p> <span class="item_price">$250</span><a class="item_add" onclick="addtoCartFunction(this)">add to cart </a></p>
+								</div>
+							</div>
+							<div class="clearfix"> </div>
+						</div>
+						<div class="new-products-grid">
+							<div class="new-products-grid-left">
+								<img src="images/11.jpg" alt=" " class="img-responsive" />
+							</div>
+							<div class="new-products-grid-right">
+								<h4><span>Bangle</span></h4>
+								<div class="rating">
+									<div class="rating-left">
+										<img src="images/2.png" alt=" " class="img-responsive">
+									</div>
+									<div class="rating-left">
+										<img src="images/2.png" alt=" " class="img-responsive">
+									</div>
+									<div class="rating-left">
+										<img src="images/2.png" alt=" " class="img-responsive">
+									</div>
+									<div class="rating-left">
+										<img src="images/1.png" alt=" " class="img-responsive">
+									</div>
+									<div class="rating-left">
+										<img src="images/1.png" alt=" " class="img-responsive">
+									</div>
+									<div class="clearfix"> </div>
+								</div>
+								<div class="simpleCart_shelfItem new-products-grid-right-add-cart">
+									<p> <span class="item_price">$259</span><a class="item_add" onclick="addtoCartFunction(this)">add to cart </a></p>
+								</div>
+							</div>
+							<div class="clearfix"> </div>
+						</div>
+					</div>
+				</div>
+				<div class="men-position animated wow slideInUp">
+					<img src="images/27.jpg" alt=" " class="img-responsive" />
+					<div class="men-position-pos">
+						<h4>Summer collection</h4>
+						<h5><span>55%</span> Flat Discount</h5>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8 products-right">
+				<div class="products-right-grid">
+					<div class="products-right-grids-position animated wow slideInRight">
+						<img src="images/18.jpg" alt=" " class="img-responsive" />
+						<div class="products-right-grids-position1">
+							<h4>2016 New Collection</h4>
+							<p>Temporibus autem quibusdam et aut officiis debitis aut rerum 
+								necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae 
+								non recusandae.</p>
+						</div>
+					</div>
+				</div>
+				<div class="products-right-grids-bottom">
+					<div class="col-md-4 products-right-grids-bottom-grid">
+						<div class="new-collections-grid1 products-right-grid1 animated wow slideInUp">
+							<div class="new-collections-grid1-image">
+								<img src="images/19.jpg" alt=" " class="img-responsive">
+								<div class="new-collections-grid1-image-pos products-right-grids-pos">
+									<a href="single.html" onclick="viewItemFunction(this)">Quick View</a>
+								</div>
+								<div class="new-collections-grid1-right products-right-grids-pos-right">
+									<div class="rating">
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/1.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/1.png" alt=" " class="img-responsive">
+										</div>
+										<div class="clearfix"> </div>
+									</div>
+								</div>
+							</div>
+							<h4><span>Gray Shirt</span></h4>
+							<p>Premium Quality.</p>
+							<div class="simpleCart_shelfItem products-right-grid1-add-cart">
+								<p><span class="original_price"><i>$325</i></span> <span class="item_price">$250</span><a class="item_add" onclick="addtoCartFunction(this)">add to cart </a></p>
+							</div>
+						</div>
+						<div class="new-collections-grid1 products-right-grid1 animated wow slideInUp">
+							<div class="new-collections-grid1-image">
+								<img src="images/21.jpg" alt=" " class="img-responsive">
+								<div class="new-collections-grid1-image-pos products-right-grids-pos">
+									<a href="single.html" onclick="viewItemFunction(this)">Quick View</a>
+								</div>
+								<div class="new-collections-grid1-right products-right-grids-pos-right">
+									<div class="rating">
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/1.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/1.png" alt=" " class="img-responsive">
+										</div>
+										<div class="clearfix"> </div>
+									</div>
+								</div>
+							</div>
+							<h4><span>Black Shorts Shoe</span></h4>
+							<p>Premium Quality.</p>
+							<div class="simpleCart_shelfItem products-right-grid1-add-cart">
+								<p><span class="original_price"><i>$325</i></span> <span class="item_price">$250</span><a class="item_add" onclick="addtoCartFunction(this)">add to cart </a></p>
+							</div>
+						</div>
+						<div class="new-collections-grid1 products-right-grid1 animated wow slideInUp">
+							<div class="new-collections-grid1-image">
+								<img src="images/24.jpg" alt=" " class="img-responsive">
+								<div class="new-collections-grid1-image-pos products-right-grids-pos">
+									<a href="single.html" onclick="viewItemFunction(this)">Quick View</a>
+								</div>
+								<div class="new-collections-grid1-right products-right-grids-pos-right">
+									<div class="rating">
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/1.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/1.png" alt=" " class="img-responsive">
+										</div>
+										<div class="clearfix"> </div>
+									</div>
+								</div>
+							</div>
+							<h4><span>Brown Blazer</span></h4>
+							<p>Premium Quality.</p>
+							<div class="simpleCart_shelfItem products-right-grid1-add-cart">
+								<p><span class="original_price"><i>$585</i></span> <span class="item_price">$489</span><a class="item_add" onclick="addtoCartFunction(this)">add to cart </a></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 products-right-grids-bottom-grid">
+						<div class="new-collections-grid1 products-right-grid1 animated wow slideInUp">
+							<div class="new-collections-grid1-image">
+								<img src="images/7.jpg" alt=" " class="img-responsive">
+								<div class="new-collections-grid1-image-pos products-right-grids-pos">
+									<a href="single.html" onclick="viewItemFunction(this)">Quick View</a>
+								</div>
+								<div class="new-collections-grid1-right products-right-grids-pos-right">
+									<div class="rating">
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/1.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/1.png" alt=" " class="img-responsive">
+										</div>
+										<div class="clearfix"> </div>
+									</div>
+								</div>
+							</div>
+							<h4><span>Light Blue Shirt</span></h4>
+							<p>Premium Quality.</p>
+							<div class="simpleCart_shelfItem products-right-grid1-add-cart">
+								<p><span class="original_price"><i>$280</i></span> <span class="item_price">$250</span><a class="item_add" onclick="addtoCartFunction(this)">add to cart </a></p>
+							</div>
+						</div>
+						<div class="new-collections-grid1 products-right-grid1 animated wow slideInUp">
+							<div class="new-collections-grid1-image">
+								<img src="images/22.jpg" alt=" " class="img-responsive">
+								<div class="new-collections-grid1-image-pos products-right-grids-pos">
+									<a href="single.html" onclick="viewItemFunction(this)">Quick View</a>
+								</div>
+								<div class="new-collections-grid1-right products-right-grids-pos-right">
+									<div class="rating">
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/1.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/1.png" alt=" " class="img-responsive">
+										</div>
+										<div class="clearfix"> </div>
+									</div>
+								</div>
+							</div>
+							<h4><span>Black Boots</span></h4>
+							<p>Premium Quality.</p>
+							<div class="simpleCart_shelfItem products-right-grid1-add-cart">
+								<p><span class="original_price"><i>$500</i></span> <span class="item_price">$480</span><a class="item_add" onclick="addtoCartFunction(this)">add to cart </a></p>
+							</div>
+						</div>
+						<div class="new-collections-grid1 products-right-grid1 animated wow slideInUp">
+							<div class="new-collections-grid1-image">
+								<img src="images/25.jpg" alt=" " class="img-responsive">
+								<div class="new-collections-grid1-image-pos products-right-grids-pos">
+									<a href="single.html" onclick="viewItemFunction(this)">Quick View</a>
+								</div>
+								<div class="new-collections-grid1-right products-right-grids-pos-right">
+									<div class="rating">
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/1.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/1.png" alt=" " class="img-responsive">
+										</div>
+										<div class="clearfix"> </div>
+									</div>
+								</div>
+							</div>
+							<h4><span>Blue Blazer</span></h4>
+							<p>Premium Quality.</p>
+							<div class="simpleCart_shelfItem products-right-grid1-add-cart">
+								<p><span class="original_price"><i>$585</i></span> <span class="item_price">$489</span><a class="item_add" onclick="addtoCartFunction(this)">add to cart </a></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 products-right-grids-bottom-grid">
+						<div class="new-collections-grid1 products-right-grid1 animated wow slideInUp">
+							<div class="new-collections-grid1-image">
+								<img src="images/20.jpg" alt=" " class="img-responsive">
+								<div class="new-collections-grid1-image-pos products-right-grids-pos">
+									<a href="single.html" onclick="viewItemFunction(this)">Quick View</a>
+								</div>
+								<div class="new-collections-grid1-right products-right-grids-pos-right">
+									<div class="rating">
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/1.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/1.png" alt=" " class="img-responsive">
+										</div>
+										<div class="clearfix"> </div>
+									</div>
+								</div>
+							</div>
+							<h4><span>Blue Shirt</span></h4>
+							<p>Premium Quality.</p>
+							<div class="simpleCart_shelfItem products-right-grid1-add-cart">
+								<p><span class="original_price"><i>$305</i></span> <span class="item_price">$280</span><a class="item_add" onclick="addtoCartFunction(this)">add to cart </a></p>
+							</div>
+						</div>
+						<div class="new-collections-grid1 products-right-grid1 animated wow slideInUp">
+							<div class="new-collections-grid1-image">
+								<img src="images/23.jpg" alt=" " class="img-responsive">
+								<div class="new-collections-grid1-image-pos products-right-grids-pos">
+									<a href="single.html" onclick="viewItemFunction(this)">Quick View</a>
+								</div>
+								<div class="new-collections-grid1-right products-right-grids-pos-right">
+									<div class="rating">
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/1.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/1.png" alt=" " class="img-responsive">
+										</div>
+										<div class="clearfix"> </div>
+									</div>
+								</div>
+							</div>
+							<h4><span>Brown Sports Shoe</span></h4>
+							<p>Premium Quality.</p>
+							<div class="simpleCart_shelfItem products-right-grid1-add-cart">
+								<p><span class="original_price"><i>$389</i></span> <span class="item_price">$299</span><a class="item_add" onclick="addtoCartFunction(this)">add to cart </a></p>
+							</div>
+						</div>
+						<div class="new-collections-grid1 products-right-grid1 animated wow slideInUp">
+							<div class="new-collections-grid1-image">
+								<img src="images/26.jpg" alt=" " class="img-responsive">
+								<div class="new-collections-grid1-image-pos products-right-grids-pos">
+									<a href="single.html" onclick="viewItemFunction(this)">Quick View</a>
+								</div>
+								<div class="new-collections-grid1-right products-right-grids-pos-right">
+									<div class="rating">
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/2.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/1.png" alt=" " class="img-responsive">
+										</div>
+										<div class="rating-left">
+											<img src="images/1.png" alt=" " class="img-responsive">
+										</div>
+										<div class="clearfix"> </div>
+									</div>
+								</div>
+							</div>
+							<h4><span>Gray Blazer</span></h4>
+							<p>Premium Quality.</p>
+							<div class="simpleCart_shelfItem products-right-grid1-add-cart">
+								<p><span class="original_price"><i>$585</i></span> <span class="item_price">$489</span><a class="item_add" onclick="addtoCartFunction(this)">add to cart </a></p>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix"> </div>
+				</div>
+			</div>
+			<div class="clearfix"> </div>
+		</div>
+	</div>
+<!-- //breadcrumbs -->
+<!-- footer -->
+	<div class="footer">
+		<div class="container">
+			<div class="footer-grids">
+				<div class="col-md-4 footer-grid animated wow slideInLeft" data-wow-delay=".5s">
+					<h3>About Us</h3>
+					<p>Duis aute irure dolor in reprehenderit in voluptate velit esse.<span>Excepteur sint occaecat cupidatat 
+						non proident, sunt in culpa qui officia deserunt mollit.</span></p>
+				</div>
+				<div class="col-md-4 footer-grid animated wow slideInLeft" data-wow-delay=".6s">
+					<h3>Contact Info</h3>
+					<ul>
+						<li><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>1234k Avenue, 4th block, <span>New York City.</span></li>
+						<li><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i><a href="mailto:info@example.com" class="footer_link" onclick="footerClickFunction(this)">info@example.com</a></li>
+						<li><i class="glyphicon glyphicon-earphone" aria-hidden="true"></i>+1234 567 567</li>
+					</ul>
+				</div>
+				<div class="col-md-4 footer-grid animated wow slideInLeft" data-wow-delay=".6s">
+					<h3>Explore</h3>
+					<ul>
+						<li><a class="footer_link" href="index.html" onclick="footerClickFunction(this)">HOME</a></li>
+						<li><a class="footer_link" href="furniture.html" onclick="footerClickFunction(this)">FURNITURE</a></li>
+						<li><a class="footer_link" href="mail.html" onclick="footerClickFunction(this)">MAIL US</a></li>
+					</ul>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+			<div class="footer-logo animated wow slideInUp" data-wow-delay=".5s">
+				<h2><a href="index.html" class="footer_link" onclick="footerClickFunction(this)">Best Store <span>shop anywhere</span></a></h2>
+			</div>
+			<div class="copy-right animated wow slideInUp" data-wow-delay=".5s">
+				<p>&copy 2016 Best Store. All rights reserved | Design by <a href="http://w3layouts.com/" class="footer_link" onclick="footerClickFunction(this)">W3layouts</a></p>
+			</div>
+		</div>
+	</div>
+<!-- //footer -->
+</body>
+</html>
