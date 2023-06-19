@@ -69,6 +69,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			var prod_brand = 'Best Store '+prod_category;
 			var prod_name = hrefVal.split('?pdNm=').pop().split('&')[0];
 			var prod_price = parseInt(hrefVal.split('pdPrc=').pop().split('&')[0]);
+			window.dataLayer = window.dataLayer || [];
 			dataLayer.push({
 			  'event':'select_item',
 			  'ecommerce': {                 
@@ -90,6 +91,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		var searchTerm = $('input#search').val().toLowerCase();
 		if(searchTerm!=undefined && (searchTerm.includes('shirt') || searchTerm.includes('shoe') || searchTerm.includes('blazer'))){
 			$('#searchForm').attr('action', 'https://best-store-lac.vercel.app/products.html');
+			window.dataLayer = window.dataLayer || [];
 			dataLayer.push({
 			  'event':'search',
 			  'search_term':searchTerm
@@ -99,6 +101,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			searchTerm.includes('cabinet') || searchTerm.includes('lamp') || searchTerm.includes('bangles') || 
 			searchTerm.includes('entertainment') || searchTerm.includes('clock') )){			
 			$('#searchForm').attr('action', 'https://best-store-lac.vercel.app/furniture.html');
+			window.dataLayer = window.dataLayer || [];
 			dataLayer.push({
 			  'event':'search',
 			  'search_term':searchTerm
@@ -164,6 +167,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			var prod_category = window.location.pathname.split('.html')[0].split('/')[1];
 			var prod_brand = 'Best Store '+prod_category;
 			if(discount_price==undefined || discount_price==null || discount_price=='' || discount_price=='na'){
+				window.dataLayer = window.dataLayer || [];
 				dataLayer.push({
 				  'event':'add_to_cart',
 				  'ecommerce': {                 
@@ -179,6 +183,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				  }
 				});
 			}else{
+				window.dataLayer = window.dataLayer || [];
 				dataLayer.push({
 				  'event':'add_to_cart',
 				  'ecommerce': {                 
@@ -215,6 +220,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				var discount_price = originalPrice-prod_price;
 				itemsInCart.push({"item_name":prod_name , "currency": "USD", discount: discount_price, item_brand: prod_brand, item_category: prod_category, "price":prod_price , "quantity":1 });
 		}
+		window.dataLayer = window.dataLayer || [];
 		dataLayer.push({
 			'event':'view_item_list',
 			'ecommerce': {                 
